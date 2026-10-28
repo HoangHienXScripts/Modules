@@ -9,9 +9,7 @@ plr = plrs.LocalPlayer
 cmr = ws.CurrentCamera
 drw = Drawing.new
 mdl = {}
-boxes = setmetatable({}, {
-  __mode = "kv"
-})
+boxes = {}
 
 function create_box(t)
   local box = drw("Square")
@@ -32,41 +30,29 @@ mdl.esp = function(state)
   if state and type(state) == "string" then
     if state:lower():match("enable") then
       table.insert(mdl.cons, rs.PostSimulation:Connect(function()
-      for user, box in boxes do
-        local char = user.Character
-        if char then
-          local root = char:FindFirstChild("HumanoidRootPart")
-          if root then
-            local scr_pos, on_scr = cmr:WorldToViewportPoint(root.Position)
-            if on_scr then
-              local new_size, new_pos = Vector2.new(40, 50) * (100 / scr_pos.Z), Vector2.new(scr_pos.X - (new_size.X / 2), scr_pos.Y - (new_size.Y / 2))
-              box.Visible = true
-              box.Size = new_size
-              box.Position = new_pos
-            else
-              box.Visible = false
+        for user, box in boxes do local char = user.Character
+          if char then local root = char:FindFirstChild("HumanoidRootPart")
+            if root then local scr_pos, on_scr = cmr:WorldToViewportPoint(root.Position)
+              if on_scr then local new_size = Vector2.new(40, 50) * (100 / scr_pos.Z)
+                local new_pos = Vector2.new(scr_pos.X - (new_size.X / 2), scr_pos.Y - (new_size.Y / 2))
+                box.Visible = true
+                box.Size = new_size
+                box.Position = new_pos
+              else box.Visible = false
+              end
+            else box.Visible = false
             end
-          else
-            box.Visible = false
+          else box.Visible = false
           end
-        else
-          box.Visible = false
         end
-      end
-    end)) return "Enabled"
-  elseif state:lower():match("disable") then
-    for _, box in boxes do
-      box.Visible = false
-    end if #mdl.cons > 0 then
-      for i = 1, #mdl.cons do
-        if mdl.cons[i] then
-          mdl.cons[i]:Disconnect()
-          mdl.cons[i] = nil
-        end
-      end
-    end return "Disabled"
-  else
-    return "ARG1: Enable or Disable"
+      end)) return "Enabled"
+    elseif state:lower():match("disable") then
+      for _, box in boxes do box.Visible = false end
+      if #mdl.cons > 0 then for i = 1, #mdl.cons do if mdl.cons[i] then mdl.cons[i]:Disconnect() mdl.cons[i] = nil end end end
+      return "Disabled"
+    else
+      return "ARG1: Enable or Disable"
+    end
   end
 end
 
