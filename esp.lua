@@ -12,7 +12,8 @@ mdl = {}
 boxes = {}
 settings = {
   size = {x = 20, y = 30},
-  color = {0, 255, 255}
+  color = {0, 255, 255},
+  line = false
 }
 
 function create_box(t)
@@ -33,7 +34,7 @@ mdl.cons = {}
 mdl.esp = function(state)
   if state and type(state) == "string" then
     if state:lower():match("enable") then
-      table.insert(mdl.cons, rs.PostSimulation:Connect(function()
+      table.insert(mdl.cons, rs.Heartbeat:Connect(function()
         for user, box in boxes do local char = user.Character
           if char then local root = char:FindFirstChild("HumanoidRootPart")
             if root then local scr_pos, on_scr = cmr:WorldToViewportPoint(root.Position)
