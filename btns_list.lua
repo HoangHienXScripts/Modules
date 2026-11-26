@@ -73,6 +73,31 @@ btn_module.clear_buttons = function()
   end
 end
 
+btn_module.add_label = function(txt)
+  if txt and type(txt) == "string" then
+    local lb = Instance.new("TextLabel", x)
+    ui_t.count = ui_t.count + 1
+    lb.Name = "LB:" .. txt .. "_#" .. tostring(ui_t.count)
+    lb.BackgroundTransparency = 0.5
+    lb.BackgroundColor3 = Color3.new(1, 1, 0)
+    lb.Position = UDim2.new(0.02, 0, 0, ui_t.canvas + ui_t.padding)
+    lb.Size = UDim2.new(0.96, 0, 0, ui_t.height)
+    lb.TextScaled = true
+    lb.TextSize = 12
+    lb.TextColor3 = Color3.new(0, 0, 0)
+    lb.Font = Enum.Font.Arcade
+    lb.Text = txt
+    lb.Visible = true
+    ui_t.next_pos = ui_t.next_pos + 12
+    ui_t.canvas = ui_t.canvas + ui_t.height + ui_t.padding
+    lb:SetAttribute("BTN_POS", ui_t.cant_be_negative(ui_t.next_pos - 12))
+    x.CanvasSize = UDim2.new(0, 0, 0, ui_t.canvas)
+    return lb
+  else
+    return "arg #1 must be a string"
+  end
+end
+
 btn_module.add_button = function(txt, func)
   if txt and func and type(txt) == "string" and type(func) == "function" then
     local btn = Instance.new("TextButton", x)
