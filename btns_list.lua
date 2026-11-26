@@ -52,8 +52,11 @@ ui_t.z_ntfc = z:Clone()
 
 local z_ntfc = ui_t.z_ntfc
 z_ntfc.Parent = z.Parent
-z_ntfc.Position = UDim2.new(0.039, 0, 0.175, 0)
-z_ntfc.Size = UDim2.new(0.085, 0, 0.06, 0)
+z_ntfc.Name = z.Name:gsub("List_T", "List_N")
+z_ntfc.Position = UDim2.new(0.045, 0, 0.175, 0)
+z_ntfc.Size = UDim2.new(0.2, 0, 0.06, 0)
+z_ntfc.TextScaled = false
+z_ntfc.TextSize = 9
 z_ntfc.Text = ""
 z_ntfc.Visible = false
 
@@ -67,8 +70,9 @@ btn_module.scroll = x
 
 ui_t.ntfc_on = false
 btn_module.ntfc = function(txt)
-  if not z_ntfc and not ui_t.ntfc_on then ui_t.ntfc_on = true
+  if not z_ntfc.Visible and not ui_t.ntfc_on then ui_t.ntfc_on = true
     z_ntfc.Text = txt or ""
+    print("["..txt.."]")
     z_ntfc.Visible = true task.wait(0.03) z_ntfc.Visible = false task.wait(0.03)
     z_ntfc.Visible = true task.wait(0.02) z_ntfc.Visible = false task.wait(0.02)
     z_ntfc.Visible = true task.wait(0.01) z_ntfc.Visible = false task.wait(0.01)
