@@ -85,7 +85,8 @@ btn_module.ntfc = function(txt)
   end
 end
 
-btn_module.create_assets = function(tbl)
+ui_t.create_asset = false
+btn_module.create_assets = function(tbl) ui_t.create_asset = true
   local drtr = {"HHxScripts", "HHxScripts/Assets", "HHxScripts/Assets/Audios"}
   if writefile and isfile and makefolder and isfolder and getcustomasset then
     for idx = 1, #drtr do if not isfolder(drtr[idx]) then makefolder(drtr[idx]) end end
