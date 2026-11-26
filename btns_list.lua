@@ -48,6 +48,14 @@ z.Text = "+"
 z.Visible = true
 z.ZIndex = 1
 ui_t.add_corner(z, 0.2)
+ui_t.z_ntfc = z:Clone()
+
+local z_ntfc = ui_t.z_ntfc
+z_ntfc.Parent = z.Parent
+z_ntfc.Position = UDim2.new(0.039, 0, 0.175, 0)
+z_ntfc.Size = UDim2.new(0.085, 0, 0.06, 0)
+z_ntfc.Text = ""
+z_ntfc.Visible = false
 
 ui_t.canvas = 0
 ui_t.height = 10
@@ -56,6 +64,20 @@ ui_t.count = 0
 ui_t.next_pos = 0
 
 btn_module.scroll = x
+
+ui_t.ntfc_on = false
+btn_module.ntfc = function(txt)
+  if not z_ntfc and not ui_t.ntfc_on then ui_t.ntfc_on = true
+    z_ntfc.Text = txt or ""
+    z_ntfc.Visible = true task.wait(0.03) z_ntfc.Visible = false task.wait(0.03)
+    z_ntfc.Visible = true task.wait(0.02) z_ntfc.Visible = false task.wait(0.02)
+    z_ntfc.Visible = true task.wait(0.01) z_ntfc.Visible = false task.wait(0.01)
+    z_ntfc.Visible = true task.wait(2.25)
+    z_ntfc.Visible = false
+    z_ntfc.Text = ""
+    ui_t.ntfc_on = false
+  end
+end
 
 btn_module.clear_buttons = function()
   local anything = x:GetChildren()
