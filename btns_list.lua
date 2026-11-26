@@ -1,5 +1,7 @@
 -- HHxScripts:UI-Lib v0.2 --
-local core = game:GetService("CoreGui")
+local ws, core
+ws = game:GetService("Workspace")
+core = game:GetService("CoreGui")
 
 for _, item in next, core:GetChildren() do
   if item:IsA("ScreenGui") and item.Name == "_Acy:Items_List_Module" then
@@ -80,6 +82,38 @@ btn_module.ntfc = function(txt)
     z_ntfc.Visible = false
     z_ntfc.Text = ""
     ui_t.ntfc_on = false
+  end
+end
+
+btn_module.create_assets = function(tbl)
+  local drtr = {"HHxScripts", "HHxScripts/Assets", "HHxScripts/Assets/Audios"}
+  if writefile and isfile and makefolder and isfolder and getcustomasset then
+    for idx = 1, #drtr do if not isfolder(drtr[idx]) then makefolder(drtr[idx]) end end
+    if not ws:FindFirstChild("HHxScripts") then Instance.new("Folder", ws).Name = "HHxScripts" end
+    if not ws.HHxScripts:FindFirstChild("Assets") then Instance.new("Folder", ws.HHxScripts).Name = "Assets" end
+    if not ws.HHxScripts.Assets:FindFirstChild("Audios") then Instance.new("Folder", ws.HHxScripts.Assets).Name = "Audios" end
+    for nme, ifo in next, tbl do
+      if nme and type(nme) == "string" and ifo and type(ifo) == "table" and ifo.id and ifo.type then
+        local asset_nme = ifo.id:gsub("//", "/"):split("/")[#ifo.id:gsub("//", "/"):split("/")] or ""
+        if asset_nme and type(asset_nme) == "string" and asset_nme ~= "" and type(ifo.id) == "string" and type(ifo.type) == "string" then
+          if not isfile(drtr[3].."/"..asset_nme) then
+            writefile(drtr[3].."/"..asset_nme, game:HttpGet(ifo.id))
+          end task.wait() local new_object
+          if ifo.type == "ado" then
+            new_object = Instance.new("Sound", ws.HHxScripts.Assets.Audios)
+            new_object.Name = nme or "Unknown_#"..tostring(math.random(1, 9999))
+            new_object.SoundId = getcustomasset(drtr[3].."/"..asset_nme)
+          end
+        end
+      end
+    end if not isfile(drtr[3].."/.nomedia") then writefile(drtr[3].."/.nomedia", "") end
+  end
+end
+
+btn_module.rcv_asset = function(tpe, nme)
+  if ui_t.create_asset and tpe and nme and type(tpe) == "string" and type(nme) == "string" then
+    tpe = tpe and tpe == "ado" and "Audios" or "Images"
+    return ws.HHxScripts.Assets[tpe]:FindFirstChild(nme)
   end
 end
 
